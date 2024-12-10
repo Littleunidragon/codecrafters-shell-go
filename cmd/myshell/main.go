@@ -10,15 +10,16 @@ import (
 
 func main() {
 	// Uncomment this block to pass the first stage
-	fmt.Fprint(os.Stdout, "$ ")
+	for {
+		fmt.Fprint(os.Stdout, "$ ")
 
-	// Wait for user input
-	input, err := bufio.NewReader(os.Stdin).ReadString('\n')
-	if err != nil {
-		log.Fatal(err)
+		// Wait for user input
+		input, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		if err != nil {
+			log.Fatal(err)
+		}
+		input = strings.TrimSuffix(input, "\r\n")
+		// fmt.Fprintf(os.Stdout, "%s: command not found\n", input)
+		fmt.Printf("%s: command not found\n", input)
 	}
-	input = strings.TrimRight(input, "\n")
-	// fmt.Fprintf(os.Stdout, "%s: command not found\n", input)
-	fmt.Fprintf(os.Stdout, "%s: command not found\n", input)
-
 }
