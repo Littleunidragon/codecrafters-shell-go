@@ -36,6 +36,8 @@ func main() {
 				fmt.Println("echo is a shell builtin")
 			case "exit":
 				fmt.Println("exit is a shell builtin")
+			case "type":
+				fmt.Println("type is a shell builtin")
 			default:
 				fmt.Printf("%s: not found\n", input[1])
 			}
