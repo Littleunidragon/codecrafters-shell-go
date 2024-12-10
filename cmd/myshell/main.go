@@ -14,18 +14,24 @@ func main() {
 		fmt.Fprint(os.Stdout, "$ ")
 
 		// Wait for user input
-		input, err := bufio.NewReader(os.Stdin).ReadString('\n')
-		input = strings.TrimRight(input, "\n")
-		input = strings.TrimSpace(input)
+		inputStr, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		inputStr = strings.TrimRight(inputStr, "\n")
+		inputStr = strings.TrimSpace(inputStr)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		switch input {
+		switch inputStr {
 		case "exit 0":
 			os.Exit(0)
+		}
+
+		input := strings.SplitN(inputStr, " ", 2)
+		switch input[0] {
+		case "echo":
+			fmt.Println(input[1])
 		default:
-			fmt.Printf("%s: command not found\n", input)
+			fmt.Printf("%s: command not found\n", inputStr)
 		}
 	}
 
