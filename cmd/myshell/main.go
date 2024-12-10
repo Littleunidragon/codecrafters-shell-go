@@ -15,12 +15,18 @@ func main() {
 
 		// Wait for user input
 		input, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		input = strings.TrimRight(input, "\n")
+		input = strings.TrimSpace(input)
 		if err != nil {
 			log.Fatal(err)
 		}
-		//input = strings.TrimSuffix(input, "\r\n")
-		// fmt.Fprintf(os.Stdout, "%s: command not found\n", input)
-		fmt.Printf("%s: command not found\n", strings.TrimRight(input, "\n"))
+
+		switch input {
+		case "exit 0":
+			os.Exit(0)
+		default:
+			fmt.Printf("%s: command not found\n", input)
+		}
 	}
 
 }
