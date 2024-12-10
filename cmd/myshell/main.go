@@ -17,7 +17,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	input = strings.TrimSuffix(input, "\r\n")
-	fmt.Fprintf(os.Stdout, "%s: command not found\n", input)
+	//input = strings.TrimSuffix(input, "\r\n")
+	// fmt.Fprintf(os.Stdout, "%s: command not found\n", input)
+	fmt.Printf("%s: command not found\n", strings.TrimRight(input, "\n"))
 
 }
