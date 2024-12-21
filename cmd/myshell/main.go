@@ -41,7 +41,7 @@ func main() {
 			default:
 				env := os.Getenv("PATH")
 				//fmt.Println(env)
-				paths := strings.Split(env, ";")
+				paths := strings.Split(env, ":")
 				for _, path := range paths {
 					fmt.Println(path)
 					exec := path + "/" + input[0]
