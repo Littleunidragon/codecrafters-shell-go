@@ -39,6 +39,16 @@ func main() {
 			case "type":
 				fmt.Println("type is a shell builtin")
 			default:
+				env := os.Getenv("PATH")
+				fmt.Println(env)
+				paths := strings.Split(env, ";")
+				for _, path := range paths {
+					exec := path + "/" + input[0]
+					if _, err := os.Stat(exec); err == nil {
+						fmt.Fprintf(os.Stdout, "%v is %v\n", input[0], exec)
+						return
+					}
+				}
 				fmt.Printf("%s: not found\n", input[1])
 			}
 		default:
