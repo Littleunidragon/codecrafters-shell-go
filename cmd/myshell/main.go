@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -44,9 +45,9 @@ func main() {
 				paths := strings.Split(env, ":")
 				for _, path := range paths {
 					fmt.Println(path)
-					exec := path + "/" + input[0]
+					exec := filepath.Join(path, input[1])
 					if _, err := os.Stat(exec); err == nil {
-						fmt.Fprintf(os.Stdout, "%v is %v\n", input[0], exec)
+						fmt.Fprintf(os.Stdout, "%v is %v\n", input[1], exec)
 						return
 					}
 				}
