@@ -42,13 +42,13 @@ func main() {
 			default:
 				env := os.Getenv("PATH")
 				//fmt.Println(env)
-				paths := strings.Split(env, ":")
+				paths := strings.Split(env, ":") // for windows its ";"
 				for _, path := range paths {
 					//fmt.Println(path)
 					exec := filepath.Join(path, input[1])
 					if _, err := os.Stat(exec); err == nil {
 						fmt.Fprintf(os.Stdout, "%v is %v\n", input[1], exec)
-						return
+						break
 					}
 				}
 				fmt.Printf("%s: not found\n", input[1])
