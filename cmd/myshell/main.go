@@ -40,21 +40,26 @@ func main() {
 			case "type":
 				fmt.Println("type is a shell builtin")
 			default:
-				env := os.Getenv("PATH")
-				//fmt.Println(env)
-				paths := strings.Split(env, ":") // for windows its ";"
-				for _, path := range paths {
-					//fmt.Println(path)
-					exec := filepath.Join(path, input[1])
-					if _, err := os.Stat(exec); err == nil {
-						fmt.Fprintf(os.Stdout, "%v is %v\n", input[1], exec)
-					}
-				}
-				fmt.Printf("%s: not found\n", input[1])
+				builtin(input[1])
 			}
 		default:
 			fmt.Printf("%s: command not found\n", inputStr)
 		}
 	}
 
+}
+
+func builtin(input string) {
+	env := os.Getenv("PATH")
+	//fmt.Println(env)
+	paths := strings.Split(env, ":") // for windows its ";"
+	for _, path := range paths {
+		//fmt.Println(path)
+		exec := filepath.Join(path, input)
+		if _, err := os.Stat(exec); err == nil {
+			fmt.Fprintf(os.Stdout, "%v is %v\n", input, exec)
+			return
+		}
+	}
+	fmt.Printf("%s: not found\n", input)
 }
