@@ -31,7 +31,10 @@ func main() {
 		input := strings.Split(inputStr, " ")
 		switch input[0] {
 		case "echo":
-			fmt.Println(input[1])
+			for i := 1; i < len(input); i++ {
+				fmt.Print(input[i] + " ")
+			}
+			fmt.Println()
 		case "type":
 			switch input[1] {
 			case "echo":
