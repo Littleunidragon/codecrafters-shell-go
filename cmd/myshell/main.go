@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 )
@@ -27,7 +28,7 @@ func main() {
 			os.Exit(0)
 		}
 
-		input := strings.SplitN(inputStr, " ", 2)
+		input := strings.Split(inputStr, " ")
 		switch input[0] {
 		case "echo":
 			fmt.Println(input[1])
@@ -43,7 +44,12 @@ func main() {
 				builtin(input[1])
 			}
 		default:
-			fmt.Printf("%s: command not found\n", inputStr)
+			command := exec.Command(input[0], input[1:]...)
+			command.Stdout = os.Stdout
+			err = command.Run()
+			if err != nil {
+				fmt.Printf("%s: command not found\n", input[0])
+			}
 		}
 	}
 
@@ -52,10 +58,10 @@ func main() {
 func builtin(input string) {
 	env := os.Getenv("PATH")
 	//fmt.Println(env)
-	paths := strings.Split(env, ":") // for windows its ";"
+	paths := strings.Split(env, ":") // for windows its ";", but tests done with ":" anywayyy os.PathListSeparator
 	for _, path := range paths {
 		//fmt.Println(path)
-		exec := filepath.Join(path, input)
+		exec := filepath.Join(path, input) // literary checks every possible path, to find the needed one?
 		if _, err := os.Stat(exec); err == nil {
 			fmt.Fprintf(os.Stdout, "%v is %v\n", input, exec)
 			return
