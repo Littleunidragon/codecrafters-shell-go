@@ -48,7 +48,6 @@ func main() {
 					exec := filepath.Join(path, input[1])
 					if _, err := os.Stat(exec); err == nil {
 						fmt.Fprintf(os.Stdout, "%v is %v\n", input[1], exec)
-						break
 					}
 				}
 				fmt.Printf("%s: not found\n", input[1])
