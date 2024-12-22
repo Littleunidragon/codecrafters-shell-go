@@ -31,14 +31,13 @@ func main() {
 			os.Exit(0)
 		}
 		input := strings.SplitN(inputStr, " ", 2)
-		reg := regexp.MustCompile(`"([^"]*)"|'([^']*)'|(\w+)`)
+		reg := regexp.MustCompile(`"(?:\\.|[^"\\])*"|'([^']*)'|(\w+)`)
 		var args [][]string
 		var result []string
 		if len(input) > 1 {
 			args = reg.FindAllStringSubmatch(input[1], -1)
 			for _, arg := range args {
 				if arg[1] != "" { // group 1 = ""
-					//?
 					result = append(result, arg[1])
 				} else if arg[2] != "" { // group 2 =''
 					result = append(result, arg[2])
