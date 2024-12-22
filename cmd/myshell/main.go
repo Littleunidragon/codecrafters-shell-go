@@ -42,14 +42,12 @@ func main() {
 			}
 			fmt.Println(dir)
 		case "cd":
-			if input[1] == "~" {
-				pathHome := os.Getenv("HOME")
-				err = os.Chdir(pathHome)
-				if err != nil {
-					fmt.Printf("cd: %s: No such file or directory\n", pathHome)
-				}
+			pathChange := ""
+			if strings.TrimSpace(input[1]) == "~" {
+				pathChange = os.Getenv("HOME")
+			} else {
+				pathChange = path.Clean(input[1])
 			}
-			pathChange := path.Clean(input[1])
 			if !path.IsAbs(pathChange) {
 				dir, _ := os.Getwd()
 				pathChange = path.Join(dir, pathChange)
