@@ -32,15 +32,18 @@ func main() {
 		}
 		input := strings.SplitN(inputStr, " ", 2)
 		reg := regexp.MustCompile(`'([^']*)'|(\S+)`)
-		args := reg.FindAllStringSubmatch(input[1], -1)
+		var args [][]string
 		var result []string
-		for _, arg := range args {
-			if arg[1] != "" {
-				// Quoted part (group 1)
-				result = append(result, arg[1])
-			} else if arg[2] != "" {
-				// Unquoted part (group 2)
-				result = append(result, arg[2])
+		if len(input) > 1 {
+			args = reg.FindAllStringSubmatch(input[1], -1)
+			for _, arg := range args {
+				if arg[1] != "" {
+					// Quoted part (group 1)
+					result = append(result, arg[1])
+				} else if arg[2] != "" {
+					// Unquoted part (group 2)
+					result = append(result, arg[2])
+				}
 			}
 		}
 
