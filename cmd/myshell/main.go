@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-	// Uncomment this block to pass the first stage
 	for {
 		fmt.Fprint(os.Stdout, "$ ")
 
@@ -35,6 +34,12 @@ func main() {
 				fmt.Print(input[i] + " ")
 			}
 			fmt.Println()
+		case "pwd":
+			dir, err := os.Getwd()
+			if err != nil {
+				fmt.Println("error")
+			}
+			fmt.Println(dir)
 		case "type":
 			switch input[1] {
 			case "echo":
@@ -64,7 +69,7 @@ func builtin(input string) {
 	paths := strings.Split(env, ":") // for windows its ";", but tests done with ":" anywayyy os.PathListSeparator
 	for _, path := range paths {
 		//fmt.Println(path)
-		exec := filepath.Join(path, input) // literary checks every possible path, to find the needed one?
+		exec := filepath.Join(path, input) // literary checks every possible path, to find THE one
 		if _, err := os.Stat(exec); err == nil {
 			fmt.Fprintf(os.Stdout, "%v is %v\n", input, exec)
 			return
