@@ -88,8 +88,6 @@ func main() {
 				fmt.Println("pwd is a shell builtin")
 			case "cd":
 				fmt.Println("cd is a shell builtin")
-			case "cat":
-				fmt.Println("cat is a shell builtin")
 			default:
 				builtin(input[1])
 			}
