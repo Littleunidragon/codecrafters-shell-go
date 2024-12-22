@@ -27,8 +27,12 @@ func main() {
 		case "exit 0":
 			os.Exit(0)
 		}
-
-		input := strings.Split(inputStr, " ")
+		var input []string
+		if strings.Contains(inputStr, "''") {
+			input = strings.Split(inputStr, "'")
+		} else {
+			input = strings.Split(inputStr, " ")
+		}
 		switch input[0] {
 		case "echo":
 			for i := 1; i < len(input); i++ {
