@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
@@ -27,16 +28,24 @@ func main() {
 		case "exit 0":
 			os.Exit(0)
 		}
-		var input []string
-		if strings.Contains(inputStr, "''") {
-			input = strings.Split(inputStr, "'")
-		} else {
-			input = strings.Split(inputStr, " ")
+		input := strings.SplitN(inputStr, " ", 2)
+		reg := regexp.MustCompile(`'([^']*)'|(\S+)`)
+		args := reg.FindAllStringSubmatch(input[1], -1)
+		var result []string
+		for _, arg := range args {
+			if arg[1] != "" {
+				// Quoted part (group 1)
+				result = append(result, arg[1])
+			} else if arg[2] != "" {
+				// Unquoted part (group 2)
+				result = append(result, arg[2])
+			}
 		}
+
 		switch input[0] {
 		case "echo":
-			for i := 1; i < len(input); i++ {
-				fmt.Print(input[i] + " ")
+			for i := 0; i < len(result); i++ {
+				fmt.Print(result[i] + " ")
 			}
 			fmt.Println()
 		case "pwd":
