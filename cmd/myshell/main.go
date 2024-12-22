@@ -31,7 +31,7 @@ func main() {
 			os.Exit(0)
 		}
 		input := strings.SplitN(inputStr, " ", 2)
-		reg := regexp.MustCompile(`"([^"]*)"|'([^']*)'|(\w+)`)
+		reg := regexp.MustCompile(`"((?:\\.|[^"\\])*)"|'([^']*)'|(\S+)`) // WARNING! double quotes doesnt work as wxpwcted yet!
 		var args [][]string
 		var result []string
 		if len(input) > 1 {
@@ -42,7 +42,7 @@ func main() {
 				} else if arg[2] != "" { // group 2 =''
 					result = append(result, arg[2])
 				} else if arg[3] != "" { //group 3 = standalone words
-					result = append(result, arg[3])
+					result = append(result, treatSpecialChar(arg[3]))
 				}
 			}
 		}
@@ -133,4 +133,8 @@ func cat(result []string) {
 		}
 		fmt.Print(string(content))
 	}
+}
+
+func treatSpecialChar(escapeSpace string) string {
+	return strings.ReplaceAll(escapeSpace, "\\", "")
 }
