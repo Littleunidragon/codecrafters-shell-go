@@ -132,5 +132,4 @@ func cat(result []string) {
 		}
 		fmt.Print(string(content))
 	}
-	fmt.Println()
 }
