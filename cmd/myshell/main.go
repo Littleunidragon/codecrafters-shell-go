@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -70,20 +71,22 @@ func main() {
 			if err != nil {
 				fmt.Printf("cd: %s: No such file or directory\n", pathChange)
 			}
-		// case "cat":
-		// 	for _, filename := range result {
-		// 		data, err := os.Open(filename)
-		// 		if err != nil {
-		// 			fmt.Println("error, invalid argument")
-		// 		}
-		// 		defer data.Close()
-		// 		content, err := io.ReadAll(os.Stdin)
-		// 		if err != nil {
-		// 			fmt.Println("rerrr reading file")
-		// 		}
-		// 		fmt.Print(string(content) + " ")
-		// 	}
-		// 	fmt.Println()
+		case "cat":
+			for _, filename := range result {
+				data, err := os.Open(filename)
+				if err != nil {
+					fmt.Println("error, invalid argument")
+					continue
+				}
+				defer data.Close()
+				content, err := io.ReadAll(data)
+				if err != nil {
+					fmt.Println("rerrr reading file")
+					continue
+				}
+				fmt.Print(string(content) + " ")
+			}
+			fmt.Println()
 		case "type":
 			switch input[1] {
 			case "echo":
@@ -96,8 +99,8 @@ func main() {
 				fmt.Println("pwd is a shell builtin")
 			case "cd":
 				fmt.Println("cd is a shell builtin")
-			// case "cat":
-			// 	fmt.Println("cat is a shell builtin")
+			case "cat":
+				fmt.Println("cat is a shell builtin")
 			default:
 				builtin(input[1])
 			}
