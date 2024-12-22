@@ -48,6 +48,8 @@ func main() {
 				fmt.Println("exit is a shell builtin")
 			case "type":
 				fmt.Println("type is a shell builtin")
+			case "pwd":
+				fmt.Println("pwd is a shell builtin")
 			default:
 				builtin(input[1])
 			}
