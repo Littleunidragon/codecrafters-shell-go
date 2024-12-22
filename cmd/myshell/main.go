@@ -84,7 +84,7 @@ func main() {
 					fmt.Println("rerrr reading file")
 					continue
 				}
-				fmt.Print(string(content) + " ")
+				fmt.Print(string(content))
 			}
 			fmt.Println()
 		case "type":
