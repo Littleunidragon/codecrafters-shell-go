@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -41,9 +42,14 @@ func main() {
 			}
 			fmt.Println(dir)
 		case "cd":
-			err = os.Chdir(input[1])
+			pathChange := path.Clean(input[1])
+			if !path.IsAbs(pathChange) {
+				dir, _ := os.Getwd()
+				pathChange = path.Join(dir, pathChange)
+			}
+			err = os.Chdir(pathChange)
 			if err != nil {
-				fmt.Printf("cd: %s: No such file or directory\n", input[1])
+				fmt.Printf("cd: %s: No such file or directory\n", pathChange)
 			}
 		case "type":
 			switch input[1] {
