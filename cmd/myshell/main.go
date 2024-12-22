@@ -15,6 +15,7 @@ import (
 
 func main() {
 	for {
+		//tests doesnot run
 		fmt.Fprint(os.Stdout, "$ ")
 
 		// Wait for user input
