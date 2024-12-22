@@ -40,6 +40,11 @@ func main() {
 				fmt.Println("error")
 			}
 			fmt.Println(dir)
+		case "cd":
+			err = os.Chdir(input[1])
+			if err != nil {
+				fmt.Printf("cd: %s: No such file or directory\n", input[1])
+			}
 		case "type":
 			switch input[1] {
 			case "echo":
@@ -50,6 +55,8 @@ func main() {
 				fmt.Println("type is a shell builtin")
 			case "pwd":
 				fmt.Println("pwd is a shell builtin")
+			case "cd":
+				fmt.Println("cd is a shell builtin")
 			default:
 				builtin(input[1])
 			}
