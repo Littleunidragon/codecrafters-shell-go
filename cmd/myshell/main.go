@@ -31,11 +31,11 @@ func main() {
 		input := processArgs(inputStr)
 		//input := strings.SplitN(inputStr, " ", 2)
 		var result []string
-		fmt.Println(input)
+		//fmt.Println(input)
 		if len(input) > 1 {
 			result = input[1:]
 		}
-		fmt.Println(result)
+		//fmt.Println(result)
 		// whatt?
 		magic := strings.Split(input[0], " ")
 
