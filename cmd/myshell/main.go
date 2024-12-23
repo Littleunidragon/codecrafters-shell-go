@@ -28,12 +28,17 @@ func main() {
 			os.Exit(0)
 		}
 
-		input := strings.SplitN(inputStr, " ", 2)
+		input := processArgs(inputStr)
+		//input := strings.SplitN(inputStr, " ", 2)
 		var result []string
+		fmt.Println(input)
 		if len(input) > 1 {
-			result = processArgs(input[1])
+			result = input[1:]
 		}
+		fmt.Println(result)
 		// whatt?
+		magic := strings.Split(input[0], " ")
+
 		switch input[0] {
 		case "echo":
 			fmt.Println(strings.Join(result, " "))
@@ -76,11 +81,16 @@ func main() {
 				builtin(input[1])
 			}
 		default:
-			command := exec.Command(input[0], input[1:]...)
-			command.Stdout = os.Stdout
-			err = command.Run()
-			if err != nil {
-				fmt.Printf("%s: command not found\n", input[0])
+			switch magic[0] {
+			case "exe":
+				cat(result)
+			default:
+				command := exec.Command(input[0], input[1:]...)
+				command.Stdout = os.Stdout
+				err = command.Run()
+				if err != nil {
+					fmt.Printf("%s: command not found\n", input[0])
+				}
 			}
 		}
 	}
