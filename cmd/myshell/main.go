@@ -38,7 +38,7 @@ func main() {
 			args = reg.FindAllStringSubmatch(input[1], -1)
 			for _, arg := range args {
 				if arg[1] != "" { // group 1 = ""
-					result = append(result, arg[1])
+					result = append(result, treatSpecialChar(arg[1]))
 				} else if arg[2] != "" { // group 2 =''
 					result = append(result, arg[2])
 				} else if arg[3] != "" { //group 3 = standalone words
@@ -136,5 +136,8 @@ func cat(result []string) {
 }
 
 func treatSpecialChar(escapeSpace string) string {
-	return strings.ReplaceAll(escapeSpace, "\\", "")
+	double := regexp.MustCompile(`\\{2}`)
+	placeholder := double.ReplaceAllString(escapeSpace, "\u0000")
+	placeholder = strings.ReplaceAll(placeholder, "\\", "")
+	return strings.ReplaceAll(placeholder, "\u0000", `\`)
 }
