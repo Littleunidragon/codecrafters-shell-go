@@ -50,7 +50,7 @@ func main() {
 		switch input[0] {
 		case "echo":
 			for i := 0; i < len(result); i++ {
-				fmt.Print(result[i] + "")
+				fmt.Print(result[i] + " ")
 			}
 			fmt.Println()
 		case "pwd":
