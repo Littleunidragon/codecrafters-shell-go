@@ -33,7 +33,7 @@ func main() {
 		if len(input) > 1 {
 			result = processArgs(input[1])
 		}
-
+		// whatt?
 		switch input[0] {
 		case "echo":
 			fmt.Println(strings.Join(result, " "))
