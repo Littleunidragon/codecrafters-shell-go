@@ -9,16 +9,13 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
-	"regexp"
 	"strings"
 )
 
 func main() {
 	for {
-		//what about now?
 		fmt.Fprint(os.Stdout, "$ ")
 
-		// Wait for user input
 		inputStr, err := bufio.NewReader(os.Stdin).ReadString('\n')
 		inputStr = strings.TrimRight(inputStr, "\n")
 		inputStr = strings.TrimSpace(inputStr)
@@ -30,29 +27,16 @@ func main() {
 		case "exit 0":
 			os.Exit(0)
 		}
+
 		input := strings.SplitN(inputStr, " ", 2)
-		reg := regexp.MustCompile(`"((?:\\.|[^"\\])*)"|'([^']*)'|(\S+)`) // WARNING! double quotes doesnt work as wxpwcted yet!
-		var args [][]string
 		var result []string
 		if len(input) > 1 {
-			args = reg.FindAllStringSubmatch(input[1], -1)
-			for _, arg := range args {
-				if arg[1] != "" { // group 1 = ""
-					result = append(result, treatSpecialChar(arg[1]))
-				} else if arg[2] != "" { // group 2 =''
-					result = append(result, arg[2])
-				} else if arg[3] != "" { //group 3 = standalone words
-					result = append(result, treatSpecialChar(arg[3]))
-				}
-			}
+			result = processArgs(input[1])
 		}
 
 		switch input[0] {
 		case "echo":
-			for i := 0; i < len(result); i++ {
-				fmt.Print(result[i] + " ")
-			}
-			fmt.Println()
+			fmt.Println(strings.Join(result, " "))
 		case "pwd":
 			dir, err := os.Getwd()
 			if err != nil {
@@ -105,11 +89,9 @@ func main() {
 
 func builtin(input string) {
 	env := os.Getenv("PATH")
-	//fmt.Println(env)
-	paths := strings.Split(env, ":") // for windows its ";", but tests done with ":" anywayyy os.PathListSeparator
+	paths := strings.Split(env, ":")
 	for _, path := range paths {
-		//fmt.Println(path)
-		exec := filepath.Join(path, input) // literary checks every possible path, to find THE one
+		exec := filepath.Join(path, input)
 		if _, err := os.Stat(exec); err == nil {
 			fmt.Fprintf(os.Stdout, "%v is %v\n", input, exec)
 			return
@@ -135,9 +117,60 @@ func cat(result []string) {
 	}
 }
 
-func treatSpecialChar(escapeSpace string) string {
-	double := regexp.MustCompile(`\\{2}`)
-	placeholder := double.ReplaceAllString(escapeSpace, "\u0000")
-	placeholder = strings.ReplaceAll(placeholder, "\\", "")
-	return strings.ReplaceAll(placeholder, "\u0000", `\`)
+// magic
+func processArgs(argstr string) []string {
+	var singleQuote bool
+	var doubleQuote bool
+	var backslash bool
+	var arg string
+	var args []string
+	for _, r := range argstr {
+		switch r {
+		case '\'':
+			if backslash && doubleQuote {
+				arg += "\\"
+			}
+			if backslash || doubleQuote {
+				arg += string(r)
+			} else {
+				singleQuote = !singleQuote
+			}
+			backslash = false
+		case '"':
+			if backslash || singleQuote {
+				arg += string(r)
+			} else {
+				doubleQuote = !doubleQuote
+			}
+			backslash = false
+		case '\\':
+			if backslash || singleQuote {
+				arg += string(r)
+				backslash = false
+			} else {
+				backslash = true
+			}
+		case ' ':
+			if backslash && doubleQuote {
+				arg += "\\"
+			}
+			if backslash || singleQuote || doubleQuote {
+				arg += string(r)
+			} else if arg != "" {
+				args = append(args, arg)
+				arg = ""
+			}
+			backslash = false
+		default:
+			if doubleQuote && backslash {
+				arg += "\\"
+			}
+			arg += string(r)
+			backslash = false
+		}
+	}
+	if arg != "" {
+		args = append(args, arg)
+	}
+	return args
 }
